@@ -5,9 +5,9 @@
 package com.sma.booktrading.agents.consumer;
 
 import jade.gui.GuiEvent;
+import java.awt.Cursor;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  *
@@ -109,6 +109,11 @@ public class ConsumerPortal extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Fira Sans Book", 0, 12)); // NOI18N
         jButton1.setText("Order");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton1MouseEntered(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -230,6 +235,10 @@ public class ConsumerPortal extends javax.swing.JFrame {
         gev.addParameter(consumerOrder);
 
         consumerAgent.onGuiEvent(gev);    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
+        jButton1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jButton1MouseEntered
 
     /**
      * @param args the command line arguments
