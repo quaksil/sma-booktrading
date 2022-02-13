@@ -7,10 +7,7 @@ For this application, the main actors are:<br/>
 - Buyer Agent
 - Seller Agent
 
-In addition the other Agents that are the core of managing messages between the above agents (ACC, DF and AMS) provided by JADE.
-
-
-
+In addition the above mentioned Agents, there are other core Agents 'ACC, DF and AMS' that provide and manage communication messages integrated within JADE.
 
 ## Description
 
