@@ -1,26 +1,25 @@
 ## Book-trading Multi-Agent System using TILAB's JADE
 
-JADE is a framework that allows the development of `Multi-Agent Systems`
+JADE is a framework that allows the development of `Multi-Agent Systems`.
 
-DF `Directory Facilitator` provides a `yellow pages` service to the platform.
+It has three (03) main modules (necessary for FIPA standards):
 
-ACC `Agent Communication Channel` manages communication between agents.
-
-AMS `Agent Management System` supervises the registration of agents, their authentication, access and use of the system.
-
+DF `Directory Facilitator:` provides a yellow pages service to the platform.
+ACC `Agent Communication Channel:` manages communication between agents.
+AMS `Agent Management System:` supervises the registration of agents, their authentication, access and use of the system.
 *These three modules are activated each time the platform is started.
 
 ## Description
 
+In this project, we will see the representation of how `agents` communicate and behave on a given platform.<br/>
 
-This is a representation of how Agents communicate and behave on a given plateform.<br/>
 For this application, the main actors are:<br/>
 
 - Consumer agent
 - Buyer agent
 - Seller agent
 
-In addition to the above mentioned agents, there are other core agents `ACC, DF, AMS`, they provide and manage communication messages between agents. They are integrated with the JADE plateform.
+In addition to the above mentioned agents `ACC, DF, AMS`, provide support for these agents to behave following a given logic.
 
 ## Installation
 
