@@ -1,4 +1,4 @@
-## Multi-Agent System for a Book-Trading Application
+## Booktrading multi-agent system with tilab's JADE
 
 ## Description
 
