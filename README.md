@@ -1,5 +1,17 @@
 ## Booktrading multi-agent system with tilab's JADE
 
+This is a representation of how Agents communicate and behave on a given plateform.<br/>
+For this application, the main actors are:<br/>
+
+- Consumer Agent
+- Buyer Agent
+- Seller Agent
+
+In addition the other Agents that are the core of managing messages between the above agents (ACC, DF and AMS) provided by JADE.
+
+
+
+
 ## Description
 
 ## Installation
@@ -13,7 +25,7 @@
 
 ### Executing program
 
-```java
+```
 Runtime runtime = Runtime.instance();
 Properties properties = new ExtendedProperties();
 properties.setProperty(Profile.GUI, "true");
