@@ -8,19 +8,19 @@ DF `Directory Facilitator:` provides a yellow pages service to the platform.<br/
 ACC `Agent Communication Channel:` manages communication between agents.<br/>
 AMS `Agent Management System:` supervises the registration of agents, their authentication, access and use of the system.<br/>
 
-*These three modules are activated each time the platform is started.*
+*These three modules are activated each time the platform is started.**
 
 ## Description
 
 In this project, we will see the representation of how `agents` communicate and behave on a given platform.<br/>
 
-For this application, the main actors are:<br/>
+The main actors for this application are:<br/>
 
 - Consumer agent
 - Buyer agent
 - Seller agent
 
-In addition to the above mentioned agents `ACC, DF, AMS`, provide support for these agents to behave following a given logic.
+In addition to the above mentioned agents, `ACC, DF and AMS` provide support for these agents to `behave` following a `given logic`.
 
 ## Installation
 
