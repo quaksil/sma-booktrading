@@ -277,7 +277,7 @@ public class ClientContainer extends javax.swing.JFrame {
         jLabel5.setText("© 2022");
 
         jLabel8.setFont(new java.awt.Font("Fira Sans Book", 1, 12)); // NOI18N
-        jLabel8.setText("Tarik HAROUN & Manal SMAALI");
+        jLabel8.setText("Tarik HAROUN");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
