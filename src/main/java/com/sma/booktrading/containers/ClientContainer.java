@@ -339,7 +339,7 @@ public class ClientContainer extends javax.swing.JFrame {
             ProfileImpl profileImpl = new ProfileImpl(false);
             profileImpl.setParameter(ProfileImpl.MAIN_HOST, "localhost");
             AgentContainer agentContainer = runtime.createAgentContainer(profileImpl);
-            AgentController agentController = agentContainer.createNewAgent(name, "com.sma.booktrading.agents.consumer.BuyerAgent", new Object[]{Integer.parseInt(strategyBox1.getItemAt(strategyBox1.getSelectedIndex()))});
+            AgentController agentController = agentContainer.createNewAgent(name, "com.sma.booktrading.agents.buyer.BuyerAgent", new Object[]{Integer.parseInt(strategyBox1.getItemAt(strategyBox1.getSelectedIndex()))});
             agentController.start();
 
             //System.out.println(strategyBox1.getItemAt(strategyBox1.getSelectedIndex()));

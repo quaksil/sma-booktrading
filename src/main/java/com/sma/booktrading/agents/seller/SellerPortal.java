@@ -227,8 +227,10 @@ public class SellerPortal extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Status", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Fira Sans Book", 0, 12))); // NOI18N
 
         statusArea.setEditable(false);
+        statusArea.setBackground(new java.awt.Color(0, 0, 0));
         statusArea.setColumns(20);
-        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 13)); // NOI18N
+        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 12)); // NOI18N
+        statusArea.setForeground(new java.awt.Color(153, 204, 0));
         statusArea.setRows(5);
         jScrollPane1.setViewportView(statusArea);
 

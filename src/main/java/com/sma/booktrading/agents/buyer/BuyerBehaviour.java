@@ -42,7 +42,10 @@ class BuyerBehaviour extends CyclicBehaviour {
     private BuyerPortal gui;
 
     private int sellerCount = 0;
+    private int refusedCount = 0;
 
+    ACLMessage aclMessageRefused;
+            
     public int strategy;
 
     // private Double desiredPrice;
@@ -224,6 +227,7 @@ public void action() {
                     }
 
                      sellerCount = sellerCount-1;
+                     refusedCount++;
                      
                         System.out.println("seller:"+ sellerCount);
                     if (contentObject1.containsKey("OrderRefused")) {
@@ -234,24 +238,20 @@ public void action() {
                         gui.showMessage("[!] Object: " + aclMessage.getConversationId());
                         gui.showMessage("[!] From: " + aclMessage.getSender().getName());
 
-                    ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
-                    aclMessageInf.addReceiver(requester);
-                    aclMessageInf.setConversationId(conversationId);
-                     {
-                         aclMessageInf.setContent("THERE WAS NO SUCCESSFUL NEGOCIATIONS!" );
-                    }
-             
-                 if(sellerCount == 0){
+                    aclMessageRefused = new ACLMessage(ACLMessage.INFORM);
+                    aclMessageRefused.addReceiver(requester);
+                    aclMessageRefused.setConversationId(conversationId);
+                    
+                                
+                 if(refusedCount == 3){
+                     aclMessageRefused.setContent("All sellers refused your order.");
                          try {
                                 Thread.sleep(3000);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                    myAgent.send(aclMessageInf);}
-                        
-
-                        
-
+                    myAgent.send(aclMessageRefused);}
+                    
                     }
                     break;
 
@@ -279,7 +279,7 @@ public void action() {
 
                     }
 
-                    if (sellerCount == 0) {
+                    if (sellerCount == 0 && refusedCount < sellersList.size()) {
 
                         AID winnerAID = null;
 
@@ -322,12 +322,21 @@ public void action() {
                         }
                         myAgent.send(aclMessageAP);
 
-                    } else {
+                    } else if(refusedCount == sellersList.size()){
+                     aclMessageRefused.setContent("All sellers refused your order.");
+                         try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                    myAgent.send(aclMessageRefused);}
+                    
+                    else if(sellerCount > 0){
 
                         ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
                         aclMessageInf.addReceiver(requester);
                         aclMessageInf.setConversationId(conversationId);
-                        aclMessageInf.setContent("Still negociating..");
+                        aclMessageInf.setContent("Please wait while we find the best offer for you..");
                         try {
                                 Thread.sleep(3000);
                             } catch (InterruptedException ex) {

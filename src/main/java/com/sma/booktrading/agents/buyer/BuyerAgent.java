@@ -93,8 +93,7 @@ public class BuyerAgent extends GuiAgent {
 
                     myAgent.send(replyMessage);
 
-                    parallelBehaviour.addSubBehaviour(new BuyerBehaviour(myAgent, book, requester, conversationId, gui, strategy));
-
+                   parallelBehaviour.addSubBehaviour(new BuyerBehaviour(myAgent, book, requester, conversationId, gui, strategy));
                 } else {
                     block();
                 }
