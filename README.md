@@ -4,10 +4,11 @@ JADE is a framework that allows the development of `Multi-Agent Systems`.
 
 It has three (03) main modules (necessary for FIPA standards):
 
-DF `Directory Facilitator:` provides a yellow pages service to the platform.
-ACC `Agent Communication Channel:` manages communication between agents.
-AMS `Agent Management System:` supervises the registration of agents, their authentication, access and use of the system.
-*These three modules are activated each time the platform is started.
+DF `Directory Facilitator:` provides a yellow pages service to the platform.<br/>
+ACC `Agent Communication Channel:` manages communication between agents.<br/>
+AMS `Agent Management System:` supervises the registration of agents, their authentication, access and use of the system.<br/>
+
+*These three modules are activated each time the platform is started.*
 
 ## Description
 
