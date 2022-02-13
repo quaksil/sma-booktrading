@@ -13,17 +13,21 @@
 
 ### Executing program
 
-```
-code blocks for commands
+```java
+Runtime runtime = Runtime.instance();
+Properties properties = new ExtendedProperties();
+properties.setProperty(Profile.GUI, "true");
+Profile profile = new ProfileImpl(properties);
+            
+AgentContainer mainContainer = runtime.createMainContainer(profile);
+mainContainer.start();
 ```
 
 ## Help
 
 ## Authors
-Tarik Haroun
-
-tarik.haroun@univ-constantine2.dz
-[@quaksil](https://github.com/quaksil/)
+Tarik Haroun<br/>
+Gmail: tarik.haroun@univ-constantine2.dz 
 
 ## Version History
 
