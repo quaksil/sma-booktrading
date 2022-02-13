@@ -4,13 +4,15 @@ public class Book {
 
     private String name;
     private Double price;
+    private Double minPrice;
     private int discount;
     private int quantity;
 
-    public Book(String name, Double price, int discount, int quantity) {
+    public Book(String name, Double price, int discount, Double minPrice, int quantity) {
         this.name = name;
         this.price = price;
         this.discount = discount;
+        this.minPrice = minPrice;
         this.quantity = quantity;
     }
 
@@ -36,6 +38,14 @@ public class Book {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+    }
+
+    public Double getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(Double minPrice) {
+        this.minPrice = minPrice;
     }
 
     public int getQuantity() {

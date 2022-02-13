@@ -37,7 +37,11 @@ public class SellerPortal extends javax.swing.JFrame {
     public void showMessage(String statusMessage) {
 
         msgPos++;
-        statusArea.append(msgPos + " > " + statusMessage + "\n");
+        if (msgPos < 10) {
+            statusArea.append(" " + msgPos + "  > " + statusMessage + "\n");
+        } else {
+            statusArea.append(msgPos + " > " + statusMessage + "\n");
+        }
     }
 
     /**
@@ -64,6 +68,8 @@ public class SellerPortal extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        minField = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         statusArea = new javax.swing.JTextArea();
@@ -101,7 +107,7 @@ public class SellerPortal extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Fira Sans Book", 1, 12)); // NOI18N
-        jLabel2.setText("Original Price");
+        jLabel2.setText("Price");
 
         discountField.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
         discountField.addActionListener(new java.awt.event.ActionListener() {
@@ -139,31 +145,53 @@ public class SellerPortal extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Fira Sans Book", 0, 14)); // NOI18N
         jLabel7.setText("%");
 
+        jLabel9.setFont(new java.awt.Font("Fira Sans Book", 1, 12)); // NOI18N
+        jLabel9.setText("Min. Price");
+
+        minField.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        minField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(priceField)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4)
-                    .addComponent(bookField, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(discountField, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(qtyField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(minField)
+                                .addGap(32, 32, 32))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel7)))))
-                .addGap(32, 32, 32))
+                                .addComponent(jLabel9)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel4)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(qtyField, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(jLabel7))))
+                            .addComponent(bookField))
+                        .addGap(32, 32, 32))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,17 +201,20 @@ public class SellerPortal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bookField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(priceField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(minField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(discountField, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel7)))
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -197,7 +228,7 @@ public class SellerPortal extends javax.swing.JFrame {
 
         statusArea.setEditable(false);
         statusArea.setColumns(20);
-        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 12)); // NOI18N
+        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 13)); // NOI18N
         statusArea.setRows(5);
         jScrollPane1.setViewportView(statusArea);
 
@@ -295,6 +326,8 @@ public class SellerPortal extends javax.swing.JFrame {
         String bookName = bookField.getText();
         String priceToParse = priceField.getText();
         Double price = Double.parseDouble(priceToParse);
+        String minPriceToParse = minField.getText();
+        Double minPrice = Double.parseDouble(minPriceToParse);
 
         String discountToParse = discountField.getText();
         int discount = Integer.parseInt(discountToParse);
@@ -311,6 +344,7 @@ public class SellerPortal extends javax.swing.JFrame {
 
         gev.addParameter(bookInfo);
 
+        gev.addParameter(minPrice);
         gev.addParameter(discount);
         gev.addParameter(quantity);
 
@@ -323,6 +357,10 @@ public class SellerPortal extends javax.swing.JFrame {
 
         jButton1.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_jButton1MouseEntered
+
+    private void minFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_minFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -371,10 +409,12 @@ public class SellerPortal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField minField;
     private javax.swing.JTextField priceField;
     private javax.swing.JTextField qtyField;
     private javax.swing.JTextArea statusArea;

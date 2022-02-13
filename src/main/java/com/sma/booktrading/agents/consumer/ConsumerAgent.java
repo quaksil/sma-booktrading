@@ -32,8 +32,8 @@ public class ConsumerAgent extends GuiAgent {
         gui.setConsumerAgent(this);
 
         gui.showMessage("[#] Initializing Consumer Agent..");
-        gui.showMessage("Agent [" + this.getAID().getName() + "] deployed successfully.");
-        gui.showMessage("Ready..");
+        gui.showMessage("[#] Agent " + this.getAID().getName() + " deployed successfully.");
+        gui.showMessage("[#] Ready..\n");
 
         parallelBehaviour = new ParallelBehaviour();
         addBehaviour(parallelBehaviour);
@@ -44,10 +44,10 @@ public class ConsumerAgent extends GuiAgent {
                 ACLMessage aclMessage = receive(messageTemplate);
 
                 if (aclMessage != null) {
-                    gui.showMessage("[!] Established contact.");
-                    gui.showMessage("[-] " + aclMessage.getConversationId());
 
-                    gui.showMessage(aclMessage.getContent());
+                    //gui.showMessage("[!] Buyer's Notice:");
+                    gui.showMessage("[!] " + aclMessage.getConversationId());
+                    gui.showMessage("[!] " + aclMessage.getContent() + "\n");
 
                 } else {
                     block();
@@ -100,9 +100,10 @@ public class ConsumerAgent extends GuiAgent {
 
                 aclMessage.addReceiver(new AID(buyer, AID.ISLOCALNAME));
 
-                gui.showMessage("[#] Processing order for the best [price]..");
+                gui.showMessage("[#] Forwarding order for buyer agent..\n");
 
                 send(aclMessage);
+
                 break;
         }
     }

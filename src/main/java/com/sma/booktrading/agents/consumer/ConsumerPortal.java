@@ -36,7 +36,11 @@ public class ConsumerPortal extends javax.swing.JFrame {
 
     public void showMessage(String statusMessage) {
         msgPos++;
-        statusArea.append(msgPos + " > " + statusMessage + "\n");
+        if (msgPos < 10) {
+            statusArea.append(" " + msgPos + "  > " + statusMessage + "\n");
+        } else {
+            statusArea.append(msgPos + " > " + statusMessage + "\n");
+        }
 
     }
 
@@ -69,7 +73,7 @@ public class ConsumerPortal extends javax.swing.JFrame {
 
         statusArea.setEditable(false);
         statusArea.setColumns(20);
-        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 12)); // NOI18N
+        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 13)); // NOI18N
         statusArea.setRows(5);
         jScrollPane1.setViewportView(statusArea);
 

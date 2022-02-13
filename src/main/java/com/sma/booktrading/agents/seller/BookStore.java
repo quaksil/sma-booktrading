@@ -16,6 +16,12 @@ public class BookStore {
 
     public BookStore() {
         books = new ArrayList<>();
+        
+        Book xml = new Book("XML", 1000.00, 10, 850.00, 5);
+        Book java = new Book("JAVA", 1000.00, 5, 950.00, 10);
+        
+        books.add(xml);
+        books.add(java);
     }
 
     public ArrayList<Book> getBooks() {
