@@ -32,7 +32,6 @@ class BuyerBehaviour extends CyclicBehaviour {
     private AID requester;
     private String bookName;
     private Double price;
- 
 
     private List<AID> sellersList = new ArrayList<>();
 
@@ -41,11 +40,12 @@ class BuyerBehaviour extends CyclicBehaviour {
 
     private BuyerPortal gui;
 
+    HashMap<AID, Double> contentObject2 = new HashMap<>();
     private int sellerCount = 0;
     private int refusedCount = 0;
 
     ACLMessage aclMessageRefused;
-            
+
     public int strategy;
 
     // private Double desiredPrice;
@@ -80,27 +80,24 @@ class BuyerBehaviour extends CyclicBehaviour {
 
         aclMessage.setContent(bookName);
         aclMessage.setConversationId(conversationId);
-        
-        // aclMessage.addUserDefinedParameter("counter", String.valueOf(counter));
 
+        // aclMessage.addUserDefinedParameter("counter", String.valueOf(counter));
         for (AID aid : sellersList) {
 
             gui.showMessage("[#] Establishing contact with: " + aid.getName());
             gui.showMessage("[#] Sending request..\n");
 
             aclMessage.addReceiver(aid);
-            
-            
+
         }
-        
+
         myAgent.send(aclMessage);
-        
+
         try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-        
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -110,16 +107,16 @@ class BuyerBehaviour extends CyclicBehaviour {
         Double min = Collections.min(contentObject.values());
 
         // Set<AID> result = new HashSet<>();
-        
         for (Entry<AID, Double> entry : contentObject.entrySet()) {
-        if (entry.getValue().equals(min)) {
-            
-            bestMinPrice.put(entry.getKey(),min);
-            
+            if (entry.getValue().equals(min)) {
+
+                bestMinPrice.put(entry.getKey(), min);
+
+            }
         }
-    }
- 
-    return bestMinPrice;
+        
+
+    return bestMinPrice ;
 
     /*bestOffer.put (
     (AID) result, min);
@@ -148,6 +145,23 @@ class BuyerBehaviour extends CyclicBehaviour {
  /*
      */
 }
+    
+     public void notifyConsumer() {
+
+        if (sellerCount > 0) {
+
+            ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
+            aclMessageInf.addReceiver(requester);
+            aclMessageInf.setConversationId(conversationId);
+            aclMessageInf.setContent("Please wait while we find the best offer for you..");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            myAgent.send(aclMessageInf);
+        }
+    }
 
 @Override
 public void action() {
@@ -203,8 +217,11 @@ public void action() {
                         }
                         try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                         myAgent.send(aclMessagePropose);
                     //}
@@ -242,17 +259,61 @@ public void action() {
                     aclMessageRefused.addReceiver(requester);
                     aclMessageRefused.setConversationId(conversationId);
                     
-                                
-                 if(refusedCount == 3){
+                       notifyConsumer();
+                       
+                  if (sellerCount == 0 && refusedCount < sellersList.size()) {
+
+                        AID winnerAID = null;
+
+                        HashMap<AID, Double> winner = findMinPrice(bestOffers);
+                        for (AID aid : winner.keySet()) {
+
+                            winnerAID = aid;
+                        }
+
+                        winner.get(winnerAID);
+
+                        gui.showMessage("[!] Proposal approved");
+                        gui.showMessage("[!] Handshake with: " + winnerAID.getName());
+                        gui.showMessage("[!]" + aclMessage.getConversationId());
+
+                        ACLMessage aclMessageAP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                        aclMessageAP.addReceiver(winnerAID);
+                        aclMessageAP.setConversationId(conversationId);
+                        {
+                            try {
+                                aclMessageAP.setContentObject(contentObject2);
+                            } catch (IOException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        gui.showMessage("Processing..");
+                        {
+                            try {
+                                Thread.sleep(2000);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        myAgent.send(aclMessageAP);
+
+                    } else if(refusedCount == sellersList.size()){
                      aclMessageRefused.setContent("All sellers refused your order.");
                          try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                     myAgent.send(aclMessageRefused);}
                     
                     }
+                    
                     break;
 
                 case ACLMessage.ACCEPT_PROPOSAL:
@@ -261,7 +322,6 @@ public void action() {
                     
                     System.out.println("seller: " + sellerCount);
                     
-                    HashMap<AID, Double> contentObject2 = new HashMap<>();
                      {
                         try {
                             contentObject2 = (HashMap<AID, Double>) aclMessage.getContentObject();
@@ -272,6 +332,15 @@ public void action() {
 .getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                     
+                     
+                          gui.showMessage("Negociated with one seller and they approved, waiting for other offers..");
+                     gui.showMessage("[!] From: " + aclMessage.getSender().getName() + "\n");
+                    
+                     
+                     notifyConsumer();
+                     
+                    
 
                     for (AID aid : contentObject2.keySet()) {
 
@@ -326,24 +395,15 @@ public void action() {
                      aclMessageRefused.setContent("All sellers refused your order.");
                          try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                     myAgent.send(aclMessageRefused);}
                     
-                    else if(sellerCount > 0){
-
-                        ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
-                        aclMessageInf.addReceiver(requester);
-                        aclMessageInf.setConversationId(conversationId);
-                        aclMessageInf.setContent("Please wait while we find the best offer for you..");
-                        try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        myAgent.send(aclMessageInf);
-                    }
+                    
 
                     break;
 
@@ -368,14 +428,33 @@ public void action() {
                     }
                      try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                     myAgent.send(aclMessageInf);
                     break;
 
                 case ACLMessage.INFORM:
 
+                    
+                    String outOfStock = aclMessage.getContent();
+                    
+                    if(outOfStock.equals("OutOfStock")){
+                        
+                        ACLMessage aclMessageOutOfStock = new ACLMessage(ACLMessage.INFORM);
+                        aclMessageOutOfStock.addReceiver(requester);
+                        aclMessageOutOfStock.setConversationId(conversationId);
+                        aclMessageOutOfStock.setContent("No books for you!");
+                        
+                        myAgent.send(aclMessageOutOfStock);
+                    
+                    break;
+                    }else{
+                    
+                    
                     HashMap<String, Integer> contentObject3 = new HashMap<>();
 
                      {
@@ -398,8 +477,11 @@ public void action() {
                         reply.setContent("Book unavailable or out of stock!");
                         try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                         myAgent.send(reply);
                         
@@ -439,8 +521,11 @@ public void action() {
                            
                             try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                             myAgent.send(aclMessageP);
                          
@@ -484,15 +569,19 @@ int finalOffer = 0;
                             }
                             try {
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+
+} catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class  
+
+.getName()).log(Level.SEVERE, null, ex);
                             }
                             myAgent.send(aclMessageP);
                         }
 
                     }
+                    notifyConsumer();
                     break;
-                    
+                    }
                 default: break;
 
             }

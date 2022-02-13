@@ -14,6 +14,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import java.awt.Cursor;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +23,8 @@ import java.util.logging.Logger;
  * @author aksil
  */
 public class ClientContainer extends javax.swing.JFrame {
+
+    int j = 0;
 
     /**
      * Creates new form ClientContainer
@@ -56,6 +59,7 @@ public class ClientContainer extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
+        jSpinner2 = new javax.swing.JSpinner();
         jPanel4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -96,9 +100,9 @@ public class ClientContainer extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addGap(43, 43, 43))
         );
         jPanel2Layout.setVerticalGroup(
@@ -185,7 +189,7 @@ public class ClientContainer extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Seller", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Fira Sans Book", 0, 12))); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Fira Sans", 1, 12)); // NOI18N
-        jLabel4.setText("Agent Name:");
+        jLabel4.setText("Agents to deploy:");
 
         jButton3.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
         jButton3.setText("Deploy");
@@ -201,18 +205,28 @@ public class ClientContainer extends javax.swing.JFrame {
         });
 
         jTextField3.setFont(new java.awt.Font("Fira Sans", 0, 12)); // NOI18N
+        jTextField3.setEnabled(false);
+
+        jSpinner2.setFont(new java.awt.Font("Fira Sans Book", 0, 12)); // NOI18N
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(97, 97, 97))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton3)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,7 +234,9 @@ public class ClientContainer extends javax.swing.JFrame {
                 .addGap(37, 37, 37)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -270,9 +286,9 @@ public class ClientContainer extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(55, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -352,18 +368,34 @@ public class ClientContainer extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
-        String name = jTextField3.getText();
+        // String name = jTextField3.getText();
         try {
-            jade.core.Runtime runtime = jade.core.Runtime.instance();
-            ProfileImpl profileImpl = new ProfileImpl(false);
-            profileImpl.setParameter(ProfileImpl.MAIN_HOST, "localhost");
-            AgentContainer agentContainer = runtime.createAgentContainer(profileImpl);
-            AgentController agentController = agentContainer.createNewAgent(name, "com.sma.booktrading.agents.seller.SellerAgent", new Object[]{});
-            agentController.start();
-        } catch (StaleProxyException ex) {
-            Logger.getLogger(ClientContainer.class.getName()).log(Level.SEVERE, null, ex);
 
+            jSpinner2.commitEdit();
+        } catch (ParseException ex) {
+            Logger.getLogger(ClientContainer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        int value = (Integer) jSpinner2.getValue();
+
+        for (int i = 1; i <= value; i++) {
+            j++;
+            try {
+
+                jade.core.Runtime runtime = jade.core.Runtime.instance();
+                ProfileImpl profileImpl = new ProfileImpl(false);
+                profileImpl.setParameter(ProfileImpl.MAIN_HOST, "localhost");
+
+                AgentContainer agentContainer = runtime.createAgentContainer(profileImpl);
+                AgentController agentController = agentContainer.createNewAgent("seller" + j, "com.sma.booktrading.agents.seller.SellerAgent", new Object[]{});
+                agentController.start();
+
+            } catch (StaleProxyException ex) {
+                Logger.getLogger(ClientContainer.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -426,6 +458,7 @@ public class ClientContainer extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;

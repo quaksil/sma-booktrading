@@ -64,15 +64,18 @@ public class SellerBehaviour extends CyclicBehaviour {
 
                     Book bookResultAP = null;
 
-                    //int quantityAP = 0;
+                    int quantityAP = 0;
                     
                     if (!myStore.getBooks().isEmpty()) {
-                        bookResult = myStore.lookup(bookName);
+                        bookResultAP = myStore.lookup(bookName);
                         if (bookResultAP != null) {
-                            quantity = bookResultAP.getQuantity();
+                            quantityAP = bookResultAP.getQuantity();
                         }
                     }
-                    if (quantity != 0) {
+                    
+                    if (quantityAP > 0) {
+                        
+                        System.out.println(quantityAP);
 
                         int quantityNew = myStore.lookup(bookName).getQuantity() - 1;
 
@@ -117,18 +120,14 @@ public class SellerBehaviour extends CyclicBehaviour {
 
                         gui.showMessage("-- " + aclMessage.getConversationId());
                         gui.showMessage("With: " + aclMessage.getSender().getName());
-                        gui.showMessage("Out of stock!");
+                        gui.showMessage("Out of stock! Another buyer took it");
 
                         ACLMessage reponse = new ACLMessage(ACLMessage.INFORM);
                         reponse.addReceiver(aclMessage.getSender());
                         reponse.setConversationId(conversationId);
                         reponse.setContent("OutOfStock");
 
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                   
   try {
                                 Thread.sleep(3000);
                             } catch (InterruptedException ex) {

@@ -4,10 +4,22 @@
  */
 package com.sma.booktrading.agents.consumer;
 
+import jade.core.AID;
+import jade.core.Agent;
+import jade.domain.AMSService;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.AMSAgentDescription;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.gui.GuiEvent;
 import java.awt.Cursor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,6 +29,7 @@ public class ConsumerPortal extends javax.swing.JFrame {
 
     ConsumerAgent consumerAgent;
     int msgPos = 0;
+    List<AID> buyersList = new ArrayList<>();
 
     /**
      * Creates new form ConsumerPortal
@@ -32,6 +45,7 @@ public class ConsumerPortal extends javax.swing.JFrame {
 
     public void setConsumerAgent(ConsumerAgent consumerAgent) {
         this.consumerAgent = consumerAgent;
+
     }
 
     public void showMessage(String statusMessage) {
@@ -41,6 +55,30 @@ public class ConsumerPortal extends javax.swing.JFrame {
         } else {
             statusArea.append(msgPos + " > " + statusMessage + "\n");
         }
+
+    }
+
+    public final List<AID> lookupServices(Agent agent) {
+        List<AID> buyers = new ArrayList<>();
+        try {
+
+            AMSAgentDescription agentDescription = new AMSAgentDescription();
+
+            agentDescription.setName(agent.getAID());
+
+            AMSAgentDescription[] descriptions;
+
+            descriptions = AMSService.search(agent, agentDescription);
+
+            for (AMSAgentDescription ams : descriptions) {
+                buyers.add(ams.getName());
+
+            }
+
+        } catch (FIPAException ex) {
+            Logger.getLogger(ConsumerPortal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return buyers;
 
     }
 
@@ -223,10 +261,6 @@ public class ConsumerPortal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buyerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyerFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buyerFieldActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         String book = bookField.getText();
@@ -245,6 +279,10 @@ public class ConsumerPortal extends javax.swing.JFrame {
     private void jButton1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseEntered
         jButton1.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_jButton1MouseEntered
+
+    private void buyerFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyerFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buyerFieldActionPerformed
 
     /**
      * @param args the command line arguments
