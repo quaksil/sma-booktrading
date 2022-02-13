@@ -20,7 +20,15 @@ The main actors for this application are:<br/>
 - Buyer agent
 - Seller agent
 
-In addition to the above mentioned agents, `ACC, DF and AMS` provide support for these agents to `behave` following a `given logic`.
+<br/>
+<p align="center">
+<kbd>
+  <img src="https://user-images.githubusercontent.com/33737302/153768003-a0f8ea09-0c57-44d9-819e-3de26b489323.png">
+</kbd>
+</p>
+
+
+In addition to the above mentioned agents, `ACC, DF and AMS` provide support for these agents to `behave (Behaviours)` and `communicate (ACLMessages)` following a `given logic`.
 
 ## Installation
 
