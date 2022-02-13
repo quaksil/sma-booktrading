@@ -1,4 +1,4 @@
-## Booktrading multi-agent system with tilab's JADE
+## Booktrading multi-agent system using tilab's JADE
 
 This is a representation of how Agents communicate and behave on a given plateform.<br/>
 For this application, the main actors are:<br/>
@@ -7,7 +7,7 @@ For this application, the main actors are:<br/>
 - Buyer Agent
 - Seller Agent
 
-In addition the above mentioned Agents, there are other core Agents 'ACC, DF and AMS' that provide and manage communication messages integrated within JADE.
+In addition the above mentioned Agents, there are other core Agents `ACC, DF and AMS` that provide and manage communication messages integrated within JADE.
 
 ## Description
 
