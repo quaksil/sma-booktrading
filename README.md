@@ -48,7 +48,7 @@ Once the negotiation is complete, these scenarios can be expected:
 
 An extra scenario would be when there are multiple consumers (two for example) and  buyers (two as well), each buyer processes a consumer's order with a single seller but there is only one book left, if one of the buyers manages to get the book, the other consumer will get a message that there are no books left and the first consumer will get the book (if the negotiation is successful).
 
-Handled ACLMessages: `conversationId', 'INFORM'.
+Handled ACLMessages: `conversationId`, `INFORM`.
 
 Here's an example of a successful transaction:
 
@@ -73,7 +73,7 @@ Firstly, a buyer agent will:
 - Once a seller approves, the buyer receives the approval and adds he seller to the waiting list until negotiation is done with other sellers.
 - The buyer selects the lowest price possible, sends an approval to the best seller and receives a confirm then forwards it to the consumer.
 
-Handled ACLMessages: `conversationId', 'INFORM', 'PROPOSE', 'ACCEPT_PROPOSAL', 'REFUSE'.
+Handled ACLMessages: `conversationId`, `INFORM`, `PROPOSE`, `ACCEPT_PROPOSAL`, `REFUSE`, `CONFIRM`.
 
 Here's an example of a successful transaction:
 
@@ -95,7 +95,10 @@ Once a seller agent is contacted, this scenario can be expected:
 Other use cases:
 - A seller can inform the buyer that the book is unavailabe, the last book was just sold or out of stock.
 
-Here's an example of a successful transaction: 
+Handled ACLMessages: 
+- Any kind of `conversationId` nature.
+
+Example of a successful transaction: 
 
 ![image](https://user-images.githubusercontent.com/33737302/153947321-e527f308-e4e0-418a-b831-f657170e73ed.png)
 
