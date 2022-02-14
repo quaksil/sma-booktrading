@@ -64,7 +64,7 @@ public class BuyerPortal extends javax.swing.JFrame {
         statusArea.setEditable(false);
         statusArea.setBackground(new java.awt.Color(0, 0, 0));
         statusArea.setColumns(20);
-        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 12)); // NOI18N
+        statusArea.setFont(new java.awt.Font("Source Code Pro", 0, 13)); // NOI18N
         statusArea.setForeground(new java.awt.Color(153, 204, 0));
         statusArea.setRows(5);
         jScrollPane1.setViewportView(statusArea);
@@ -210,7 +210,7 @@ public class BuyerPortal extends javax.swing.JFrame {
     public void showMessage(String statusMessage) {
         msgPos++;
         if (msgPos < 10) {
-            statusArea.append(" "+ msgPos + " > " + statusMessage + "\n");
+            statusArea.append(msgPos + "  > " + statusMessage + "\n");
         } else {
             statusArea.append(msgPos + " > " + statusMessage + "\n");
         }

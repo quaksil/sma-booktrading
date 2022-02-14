@@ -74,7 +74,7 @@ public class SellerAgent extends GuiAgent{
                 if (aclMessage != null) {
 
                     gui.showMessage("[!] CFP: " + aclMessage.getConversationId());
-                    gui.showMessage("From: " + aclMessage.getSender().getName() + "\n");
+                    gui.showMessage("[!] From: " + aclMessage.getSender().getName() + "\n");
 
                     String bookName = aclMessage.getContent();
                     Book book = null;

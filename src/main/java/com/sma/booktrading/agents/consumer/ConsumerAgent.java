@@ -46,8 +46,8 @@ public class ConsumerAgent extends GuiAgent {
                 if (aclMessage != null) {
 
                     //gui.showMessage("[!] Buyer's Notice:");
-                    gui.showMessage("[!] " + aclMessage.getConversationId());
-                    gui.showMessage("[!] " + aclMessage.getContent() + "\n");
+                    gui.showMessage(aclMessage.getContent());
+                    //gui.showMessage("[#] Object: " + aclMessage.getConversationId() + "\n");
 
                 } else {
                     block();
@@ -88,6 +88,7 @@ public class ConsumerAgent extends GuiAgent {
 
                 String conversationId = "transaction_" + book + "_" + this.getAID().getName() + "_" + requesterCount;
                 aclMessage.setConversationId(conversationId);
+                
 
                 Order order = new Order(book);
 
@@ -100,7 +101,8 @@ public class ConsumerAgent extends GuiAgent {
 
                 aclMessage.addReceiver(new AID(buyer, AID.ISLOCALNAME));
 
-                gui.showMessage("[#] Forwarding order for buyer agent..\n");
+                gui.showMessage("[#] Forwarding order for buyer agent..");
+                gui.showMessage("[#] Object: " + aclMessage.getConversationId() + "\n");
 
                 send(aclMessage);
 

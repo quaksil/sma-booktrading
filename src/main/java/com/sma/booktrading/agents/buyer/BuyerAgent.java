@@ -62,38 +62,39 @@ public class BuyerAgent extends GuiAgent {
 
                 if (aclMessage != null) {
 
-                    Order order = null;
-
                     try {
-                        order = (Order) aclMessage.getContentObject();
-                    } catch (UnreadableException ex) {
-                        Logger.getLogger(BuyerAgent.class.getName()).log(Level.SEVERE, null, ex);
-                    }
 
-                    String book = order.getBook();
+                        Order order = null;
 
-                    AID requester = aclMessage.getSender();
-                    String conversationId = aclMessage.getConversationId();
+                        try {
+                            order = (Order) aclMessage.getContentObject();
+                        } catch (UnreadableException ex) {
+                            Logger.getLogger(BuyerAgent.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
-                    gui.showMessage("[!] Received book purchase request for: " + book);
-                    gui.showMessage("[!] Object: " + conversationId);
-                    gui.showMessage("[!] From: " + requester.getName() + "\n");
+                        String book = order.getBook();
 
-                    ACLMessage replyMessage = new ACLMessage(ACLMessage.INFORM);
+                        AID requester = aclMessage.getSender();
+                        String conversationId = aclMessage.getConversationId();
 
-                    replyMessage.addReceiver(requester);
-                    replyMessage.setConversationId(conversationId);
-                    replyMessage.setContent("Processing request by: " + myAgent.getAID().getName());
+                        gui.showMessage("[!] Received book purchase request for: " + book);
+                        gui.showMessage("[!] Object: " + conversationId);
+                        gui.showMessage("[!] From: " + requester.getName() + "\n");
 
-                    try {
-                        Thread.sleep(5000);
+                        ACLMessage replyMessage = new ACLMessage(ACLMessage.INFORM);
+
+                        replyMessage.addReceiver(requester);
+                        replyMessage.setConversationId(conversationId);
+                        replyMessage.setContent("[#] Processing request by: " + myAgent.getAID().getName()+"\n");
+
+                        Thread.sleep(3000);
+
+                        myAgent.send(replyMessage);
+
+                        parallelBehaviour.addSubBehaviour(new BuyerBehaviour(myAgent, book, requester, conversationId, gui, strategy));
                     } catch (InterruptedException ex) {
                         Logger.getLogger(BuyerAgent.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
-                    myAgent.send(replyMessage);
-
-                   parallelBehaviour.addSubBehaviour(new BuyerBehaviour(myAgent, book, requester, conversationId, gui, strategy));
                 } else {
                     block();
                 }

@@ -75,65 +75,59 @@ public class SellerBehaviour extends CyclicBehaviour {
                     
                     if (quantityAP > 0) {
                         
-                        System.out.println(quantityAP);
-
-                        int quantityNew = myStore.lookup(bookName).getQuantity() - 1;
-
-                        myStore.lookup(bookName).setQuantity(quantityNew);
-
-                        gui.showMessage("[#] Finalizing transaction.. ");
-                        gui.showMessage("--" + aclMessage.getConversationId());
-                        gui.showMessage("With: " + aclMessage.getSender().getName() + "\n");
-
-                        ACLMessage reply = aclMessage.createReply();
-
-                        reply.setPerformative(ACLMessage.CONFIRM);
-                        
-                        HashMap<AID, Double> contentObject = new HashMap<>();
-                try {
-                    contentObject = (HashMap<AID, Double>) aclMessage.getContentObject();
-                } catch (UnreadableException ex) {
-                    Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                Double price = 0.0;
-                        for(Double finalPrice : contentObject.values())
-                        {
-                         price = finalPrice;
-                        }
-                       
-                try {
-                    reply.setContentObject(price);
-                } catch (IOException ex) {
-                    Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                    
-                        gui.showMessage("[#] Sending confirm..");
-
-                   
                         try {
+                            
+                            System.out.println(quantityAP);
+                            
+                            int quantityNew = myStore.lookup(bookName).getQuantity() - 1;
+                            
+                            myStore.lookup(bookName).setQuantity(quantityNew);
+                            
+                            gui.showMessage("[#] Finalizing transaction with: "+ aclMessage.getSender().getName());
+                            gui.showMessage("[#] For object: " + aclMessage.getConversationId());
+                            
+                            ACLMessage reply = aclMessage.createReply();
+                            
+                            reply.setPerformative(ACLMessage.CONFIRM);
+                            
+                            HashMap<AID, Double> contentObject = new HashMap<>();
+                            
+                            contentObject = (HashMap<AID, Double>) aclMessage.getContentObject();
+                            
+                            Double price = 0.0;
+                            for(Double finalPrice : contentObject.values())
+                            {
+                                price = finalPrice;
+                            }
+                            
+                            reply.setContentObject(price);
+                            
+                            
+                            gui.showMessage("[#] Success, sending confirmation..\n");
+ 
                                 Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
+
+                                myAgent.send(reply);
+                        } catch (IOException | UnreadableException | InterruptedException ex) {
                                 Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        myAgent.send(reply);
                     } else {
 
-                        gui.showMessage("-- " + aclMessage.getConversationId());
-                        gui.showMessage("With: " + aclMessage.getSender().getName());
-                        gui.showMessage("Out of stock! Another buyer took it");
-
-                        ACLMessage reponse = new ACLMessage(ACLMessage.INFORM);
-                        reponse.addReceiver(aclMessage.getSender());
-                        reponse.setConversationId(conversationId);
-                        reponse.setContent("OutOfStock");
-
-                   
-  try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        myAgent.send(reponse);
+                try {
+                    gui.showMessage("[#] The last book was just sold, out of stock.");
+                    gui.showMessage("[#] For object: " + aclMessage.getConversationId() + "\n");
+                    
+                    ACLMessage reponse = new ACLMessage(ACLMessage.INFORM);
+                    reponse.addReceiver(aclMessage.getSender());
+                    reponse.setConversationId(conversationId);
+                    reponse.setContent("OutOfStock");
+                    
+                    Thread.sleep(3000);
+                    
+                    myAgent.send(reponse);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                }
                     }
                     break;
 
@@ -165,18 +159,13 @@ public class SellerBehaviour extends CyclicBehaviour {
 
                         System.out.println(aclMessage.getContent());
 
-                        gui.showMessage("[!] Received negotiation proposal: ");
-                        gui.showMessage("-- " + aclMessage.getConversationId());
-                        gui.showMessage("From: " + aclMessage.getSender().getName() + "\n");
-                    }
-
-                    gui.showMessage("[!] Processing..");
-                    gui.showMessage("--" + aclMessage.getConversationId() + "\n");
-
+                        gui.showMessage("[#] Received an offer from: " + aclMessage.getConversationId());
+                        gui.showMessage("[#] Processing..");
+                        
                     if (quantity > 0) {
 
-                        gui.showMessage("[!] Buyer's discount proposal: " + strategy + "%");
-                        gui.showMessage("[!] Max. possible discount: " + discount + "%");
+                        gui.showMessage("[#] They offer: " + strategy + "%");
+                        gui.showMessage("[#] Max. possible discount: " + discount + "%");
                         int offer = ThreadLocalRandom.current().nextInt(1, discount - 1);
                         gui.showMessage("[#] Offering: " + offer + "%\n");
 
@@ -218,42 +207,39 @@ public class SellerBehaviour extends CyclicBehaviour {
 
                     }
 
-                }
+                }}
 
                 if (contentObject.containsKey("FinalProposal")) {
 
                     int finalOffer = contentObject.get("FinalProposal");
                 
 
-                    gui.showMessage("[!] Buyer's last chance for a discount.. \n");
-                    gui.showMessage("[#] Offered: " + finalOffer + "%\n");
+                    gui.showMessage("[#] Buyer wants: "+finalOffer + "%, considering final offer..");
 
                     if (bookResult.getPrice() - ((bookResult.getPrice() * finalOffer) / 100) < bookResult.getMinPrice()) {
                         
-                        gui.showMessage("[#] Denying order with offer: " + finalOffer + "%\n");
-                        gui.showMessage("[#] " + aclMessage.getConversationId());
-
-                        ACLMessage aclMessageP = new ACLMessage(ACLMessage.REFUSE);
-                        aclMessageP.addReceiver(aclMessage.getSender());
-                        aclMessageP.setConversationId(conversationId);
-                        
-                        HashMap<String, AID> contentObjectR = new HashMap<>();
-                        contentObjectR.put("OrderRefused", myAgent.getAID());
                         try {
+                            gui.showMessage("[#] Denying order with offer: " + finalOffer + "%\n");
+                            
+                            ACLMessage aclMessageP = new ACLMessage(ACLMessage.REFUSE);
+                            aclMessageP.addReceiver(aclMessage.getSender());
+                            aclMessageP.setConversationId(conversationId);
+                            
+                            HashMap<String, AID> contentObjectR = new HashMap<>();
+                            contentObjectR.put("OrderRefused", myAgent.getAID());
+                            
                             aclMessageP.setContentObject(contentObjectR);
-                        } catch (IOException ex) {
+                            
+                            myAgent.send(aclMessageP);
+                            Thread.sleep(3000);
+                            
+                           
+                        } catch (IOException | InterruptedException ex) {
                             Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                          try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        myAgent.send(aclMessageP);
 
                     } else {
-                        gui.showMessage("[#] Accepting offer with offer: " + finalOffer + "%\n");
-                        gui.showMessage("-- " + aclMessage.getConversationId());
+                        gui.showMessage("[#] Accepting offer: " + finalOffer + "%\n");
 
                         ACLMessage aclMessageP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                         aclMessageP.addReceiver(aclMessage.getSender());
@@ -288,49 +274,50 @@ public class SellerBehaviour extends CyclicBehaviour {
                     if (contentObject.containsKey("No")) {
 
                         try {
-                            contentObject = (HashMap<String, Integer>) aclMessage.getContentObject();
-                        } catch (UnreadableException ex) {
-                            Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                        int offer;
-                        int lastOffer = contentObject.get("No");
-
-                        negoTry++;
-
-                        gui.showMessage("[!] Buyer is hesitant!");
-                        gui.showMessage("-- " + aclMessage.getConversationId());
-                        gui.showMessage("Trying to negociate again..\n");
-
-                        if (lastOffer < discount / 2) {
-
-                            offer = ThreadLocalRandom.current().nextInt(discount / 2, discount - 1);
-
-                        } else {
-
-                            offer = discount;
-                        }
-
-                        gui.showMessage("[#] Sending new offer: " + offer + "%\n");
-                        ACLMessage aclMessageP = new ACLMessage(ACLMessage.INFORM);
-                        aclMessageP.addReceiver(aclMessage.getSender());
-                        aclMessageP.setConversationId(conversationId);
-
-                        HashMap<String, Integer> contentObjectR = new HashMap<>();
-
-                        contentObjectR.put("LastOffer", offer);
-
-                        try {
-                            aclMessageP.setContentObject(contentObjectR);
-                        } catch (IOException ex) {
-                            Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-  try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException ex) {
+                            
+                            try {
+                                contentObject = (HashMap<String, Integer>) aclMessage.getContentObject();
+                            } catch (UnreadableException ex) {
                                 Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        myAgent.send(aclMessageP);
+                            
+                            int offer;
+                            int lastOffer = contentObject.get("No");
+                            
+                            negoTry++;
+                            
+                            gui.showMessage("[#] Buyer is hesitant, considering a new offer..");
+                            
+                            if (lastOffer < discount / 2) {
+                                
+                                offer = ThreadLocalRandom.current().nextInt(discount / 2, discount - 1);
+                                
+                            } else {
+                                
+                                offer = discount;
+                            }
+                            
+                            gui.showMessage("[#] Offering: " + offer + "%\n");
+                            ACLMessage aclMessageP = new ACLMessage(ACLMessage.INFORM);
+                            aclMessageP.addReceiver(aclMessage.getSender());
+                            aclMessageP.setConversationId(conversationId);
+                            
+                            HashMap<String, Integer> contentObjectR = new HashMap<>();
+                            
+                            contentObjectR.put("LastOffer", offer);
+                            
+                            
+                            aclMessageP.setContentObject(contentObjectR);
+                            myAgent.send(aclMessageP);
+                            
+                            Thread.sleep(3000);
+                            
+                            
+                        } catch (IOException | InterruptedException ex) {
+                            Logger.getLogger(SellerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+  
+                        
                     }
 
                     break;

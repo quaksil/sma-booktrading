@@ -49,7 +49,7 @@ class BuyerBehaviour extends CyclicBehaviour {
     public int strategy;
 
     // private Double desiredPrice;
-    public BuyerBehaviour(Agent agent, String bookName, AID requester, String conversationId, BuyerPortal gui, int strategy) {
+    public BuyerBehaviour(Agent agent, String bookName, AID requester, String conversationId, BuyerPortal gui, int strategy) throws InterruptedException {
 
         super(agent);
 
@@ -63,15 +63,15 @@ class BuyerBehaviour extends CyclicBehaviour {
 
         sellersList = lookupServices(myAgent, "book-selling");
 
-        gui.showMessage("[!] Service providers: \n");
+        gui.showMessage("[#] Service providers: \n");
 
         for (AID aid : sellersList) {
 
             sellerCount = sellerCount + 1;
-            gui.showMessage("[!] Seller " + sellerCount + ": " + aid.getName() + "\n");
+            gui.showMessage("[#] Seller " + sellerCount + ": " + aid.getName() + "\n");
         }
 
-        System.out.println("seller: " + sellerCount);
+        // System.out.println("seller: " + sellerCount);
 
         gui.showMessage("[#] Processing book purchase request for: " + bookName);
         gui.showMessage("[#] From: " + requester.getName() + "\n");
@@ -82,6 +82,7 @@ class BuyerBehaviour extends CyclicBehaviour {
         aclMessage.setConversationId(conversationId);
 
         // aclMessage.addUserDefinedParameter("counter", String.valueOf(counter));
+        
         for (AID aid : sellersList) {
 
             gui.showMessage("[#] Establishing contact with: " + aid.getName());
@@ -92,12 +93,8 @@ class BuyerBehaviour extends CyclicBehaviour {
         }
 
         myAgent.send(aclMessage);
+        Thread.sleep(3000);
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }
 
@@ -117,33 +114,6 @@ class BuyerBehaviour extends CyclicBehaviour {
         
 
     return bestMinPrice ;
-
-    /*bestOffer.put (
-    (AID) result, min);
-
-    return bestOffer ;
-
-    /* HashMap<AID, Double> bookMinPrices = new HashMap<>();
-        AID[] aidS = new AID[contentObject.size()];
-        int pos = 0;
-
-        for (AID aid : contentObject.keySet()) {
-
-            aidS[pos] = aid;
-            pos++;
-
-        }
-
-        pos = 0;
-        for (Book book : contentObject.values()) {
-
-            bookMinPrices.put(aidS[pos], book.getPrice());
-            pos++;
-
-        }
-     */
- /*
-     */
 }
     
      public void notifyConsumer() {
@@ -153,7 +123,7 @@ class BuyerBehaviour extends CyclicBehaviour {
             ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
             aclMessageInf.addReceiver(requester);
             aclMessageInf.setConversationId(conversationId);
-            aclMessageInf.setContent("Please wait while we find the best offer for you..");
+            aclMessageInf.setContent("[!] We're hooking you up, please wait..");
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException ex) {
@@ -178,82 +148,72 @@ public void action() {
 
                     price = Double.parseDouble(aclMessage.getContent());
 
-                    gui.showMessage("[!] Receiving proposal: ");
-                    gui.showMessage("-- " + aclMessage.getConversationId());
-                    gui.showMessage("From: " + aclMessage.getSender().getName());
-                    gui.showMessage("Price: " + price + "\n");
-
-                    gui.showMessage("Starting Negociation for best [price]..");
-                    gui.showMessage("-- " + aclMessage.getConversationId());
-                    gui.showMessage("Discount Strategy: " + strategy + "% \n");
-
+                    gui.showMessage("[#] Receiving proposal from: " + aclMessage.getSender().getName());
+                    gui.showMessage("[#] Price: " + price);
+                    gui.showMessage("[#] Negociating for: " + strategy + "%");
+                   
                     // offers.put(aclMessage.getSender(), price);
 
                     // for (AID aid : offers.keySet()) {
 
                         ACLMessage aclMessagePropose = new ACLMessage(ACLMessage.PROPOSE);
-                        gui.showMessage("[#] Sending proposal to: " + aclMessage.getSender().getName());
+                        
+                        // gui.showMessage("[#] Sending proposal to: " + aclMessage.getSender().getName());
 
                         aclMessagePropose.addReceiver(aclMessage.getSender());
                         aclMessagePropose.setConversationId(conversationId);
 
                         HashMap<String, Integer> contentObject = new HashMap<>();
                         contentObject.put("FirstProposal", strategy);
-                        try {
-                            aclMessagePropose.setContentObject(contentObject);
-                        } catch (IOException ex) {
-                        }
-
-                        //aclMessageP.setContent("FirstProposal");
                         
-                        gui.showMessage("Processing..\n");
-                        try {
-                            Thread.sleep(2000);
-
-} catch (InterruptedException ex) {
-                            Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        try {
-                                Thread.sleep(3000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
+                           
+                    
+                {
+                    try {
+                        aclMessagePropose.setContentObject(contentObject);
+                    } catch (IOException ex) {
+                        Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                         myAgent.send(aclMessagePropose);
-                    //}
+                {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                        gui.showMessage("[#] Processing..\n");
 
                     break;
+
+
 
                 case ACLMessage.REFUSE:
 
                     HashMap<String, AID> contentObject1 = new HashMap<>();
 
-                     {
-                        try {
-                            contentObject1 = (HashMap<String, AID>) aclMessage.getContentObject();
-
-} catch (UnreadableException ex) {
-                            Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                        }
+                {
+                    try {
+                        contentObject1 = (HashMap<String, AID>) aclMessage.getContentObject();
+                    } catch (UnreadableException ex) {
+                        Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
+
 
                      sellerCount = sellerCount-1;
                      refusedCount++;
                      
-                        System.out.println("seller:"+ sellerCount);
-                    if (contentObject1.containsKey("OrderRefused")) {
+                       // System.out.println("seller:"+ sellerCount);
+                    
+                     if (contentObject1.containsKey("OrderRefused")) {
 
                         offers.remove(contentObject1.get("OrderRefused"));
 
-                        gui.showMessage("[!] Offer refused.");
-                        gui.showMessage("[!] Object: " + aclMessage.getConversationId());
-                        gui.showMessage("[!] From: " + aclMessage.getSender().getName());
+                        gui.showMessage("[!] Offer refused by: " + aclMessage.getSender().getName());
+                        gui.showMessage("[!] For object: " + aclMessage.getConversationId());
+                        gui.showMessage("[!] Forwarding response to consumer.."+"\n");
 
                     aclMessageRefused = new ACLMessage(ACLMessage.INFORM);
                     aclMessageRefused.addReceiver(requester);
@@ -263,79 +223,70 @@ public void action() {
                        
                   if (sellerCount == 0 && refusedCount < sellersList.size()) {
 
-                        AID winnerAID = null;
-
-                        HashMap<AID, Double> winner = findMinPrice(bestOffers);
-                        for (AID aid : winner.keySet()) {
-
-                            winnerAID = aid;
-                        }
-
-                        winner.get(winnerAID);
-
-                        gui.showMessage("[!] Proposal approved");
-                        gui.showMessage("[!] Handshake with: " + winnerAID.getName());
-                        gui.showMessage("[!]" + aclMessage.getConversationId());
-
-                        ACLMessage aclMessageAP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-                        aclMessageAP.addReceiver(winnerAID);
-                        aclMessageAP.setConversationId(conversationId);
-                        {
                             try {
+                                AID winnerAID = null;
+                                
+                                HashMap<AID, Double> winner = findMinPrice(bestOffers);
+                                for (AID aid : winner.keySet()) {
+                                    
+                                    winnerAID = aid;
+                                }
+                                
+                                winner.get(winnerAID);
+                                
+                                gui.showMessage("[!] Offer approved, handshake with: " + winnerAID.getName());
+                                gui.showMessage("[!] For object: " + aclMessage.getConversationId() );
+                                
+                                
+                                ACLMessage aclMessageAP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                                aclMessageAP.addReceiver(winnerAID);
+                                aclMessageAP.setConversationId(conversationId);
+                                
+                                gui.showMessage("[#] Processing.." + "\n");
                                 aclMessageAP.setContentObject(contentObject2);
-                            } catch (IOException ex) {
-                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        gui.showMessage("Processing..");
-                        {
-                            try {
+                                
+                                
+                                
+                                myAgent.send(aclMessageAP);
                                 Thread.sleep(2000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        myAgent.send(aclMessageAP);
+                            } catch (IOException | InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                            } 
 
                     } else if(refusedCount == sellersList.size()){
-                     aclMessageRefused.setContent("All sellers refused your order.");
-                         try {
+                     aclMessageRefused.setContent("[!] All sellers refused your order.\n");
+                     
+                                myAgent.send(aclMessageRefused);
+                            try {
                                 Thread.sleep(3000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                    myAgent.send(aclMessageRefused);}
+
+
+                    
+                    }
                     
                     }
                     
                     break;
 
+
                 case ACLMessage.ACCEPT_PROPOSAL:
 
                     sellerCount = sellerCount-1;
                     
-                    System.out.println("seller: " + sellerCount);
-                    
-                     {
-                        try {
-                            contentObject2 = (HashMap<AID, Double>) aclMessage.getContentObject();
-
-} catch (UnreadableException ex) {
-                            Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                        }
+                {
+                    try {
+                        // System.out.println("seller: " + sellerCount);
+                        
+                        contentObject2 = (HashMap<AID, Double>) aclMessage.getContentObject();
+                    } catch (UnreadableException ex) {
+                        Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                     
-                     
-                          gui.showMessage("Negociated with one seller and they approved, waiting for other offers..");
-                     gui.showMessage("[!] From: " + aclMessage.getSender().getName() + "\n");
+                }
+                     gui.showMessage("[#] One seller approved, waiting for other offers..");
+                     gui.showMessage("[#] Seller: " + aclMessage.getSender().getName() + "\n");
                     
                      
                      notifyConsumer();
@@ -350,75 +301,64 @@ public void action() {
 
                     if (sellerCount == 0 && refusedCount < sellersList.size()) {
 
-                        AID winnerAID = null;
+                try {
+                    AID winnerAID = null;
+                    
+                    HashMap<AID, Double> winner = findMinPrice(bestOffers);
+                    for (AID aid : winner.keySet()) {
+                        
+                        winnerAID = aid;
+                    }
+                    
+                    winner.get(winnerAID);
+                    
+                    gui.showMessage("[!] Offer approved, handshake with: " + winnerAID.getName());
+                    gui.showMessage("[!] For object: " + aclMessage.getConversationId() );
+                    
+                    ACLMessage aclMessageAP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                    aclMessageAP.addReceiver(winnerAID);
+                    aclMessageAP.setConversationId(conversationId);
+                    
+                    aclMessageAP.setContentObject(aclMessage.getContentObject());
+                    
+                    
+                    gui.showMessage("[#] Processing..\n");
+                            myAgent.send(aclMessageAP);
+                            Thread.sleep(3000);
+                } catch (UnreadableException | IOException | InterruptedException ex) {
+                    Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                        HashMap<AID, Double> winner = findMinPrice(bestOffers);
-                        for (AID aid : winner.keySet()) {
 
-                            winnerAID = aid;
-                        }
-
-                        winner.get(winnerAID);
-
-                        gui.showMessage("[!] Proposal approved");
-                        gui.showMessage("[!] Handshake with: " + winnerAID.getName());
-                        gui.showMessage("[!]" + aclMessage.getConversationId());
-
-                        ACLMessage aclMessageAP = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
-                        aclMessageAP.addReceiver(winnerAID);
-                        aclMessageAP.setConversationId(conversationId);
-                        {
-                            try {
-
-                                aclMessageAP.setContentObject(aclMessage.getContentObject());
-
-} catch (UnreadableException | IOException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        gui.showMessage("Processing..");
-                        {
-                            try {
-                                Thread.sleep(2000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-                        myAgent.send(aclMessageAP);
+                       
 
                     } else if(refusedCount == sellersList.size()){
-                     aclMessageRefused.setContent("All sellers refused your order.");
-                         try {
-                                Thread.sleep(3000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-                    myAgent.send(aclMessageRefused);}
+                try {
+                    aclMessageRefused.setContent("[#] All sellers refused your order.\n");
                     
-                    
+                    myAgent.send(aclMessageRefused);
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+
+                    }
 
                     break;
 
                 case ACLMessage.CONFIRM:
 
-                    gui.showMessage("[#] Receiving confirmation.. ");
-                    gui.showMessage("-- " + aclMessage.getConversationId());
-                    gui.showMessage("From: " + aclMessage.getSender().getName());
-
+                    gui.showMessage("[#] Receiving confirmation from: " + aclMessage.getSender().getName());
+                    gui.showMessage("[#] Forwarding confirmation to consumer.\n");
                     ACLMessage aclMessageInf = new ACLMessage(ACLMessage.INFORM);
+
+                    
                     aclMessageInf.addReceiver(requester);
                     aclMessageInf.setConversationId(conversationId);
                      {
                         try {
-                            aclMessageInf.setContent("[!] Transaction receipt:\n" + "Book : " + bookName + "\n Best discount: " + aclMessage.getContentObject() + "\nSeller: " + aclMessage.getSender().getName());
+                            aclMessageInf.setContent("[!] Yay! we got you the book for: " + aclMessage.getContentObject());
 
 } catch (UnreadableException ex) {
                             Logger.getLogger(BuyerBehaviour.class  
@@ -435,6 +375,7 @@ public void action() {
 .getName()).log(Level.SEVERE, null, ex);
                             }
                     myAgent.send(aclMessageInf);
+
                     break;
 
                 case ACLMessage.INFORM:
@@ -447,7 +388,7 @@ public void action() {
                         ACLMessage aclMessageOutOfStock = new ACLMessage(ACLMessage.INFORM);
                         aclMessageOutOfStock.addReceiver(requester);
                         aclMessageOutOfStock.setConversationId(conversationId);
-                        aclMessageOutOfStock.setContent("No books for you!");
+                        aclMessageOutOfStock.setContent("[#] No books for you, the last book was just sold.\n");
                         
                         myAgent.send(aclMessageOutOfStock);
                     
@@ -470,11 +411,11 @@ public void action() {
 
                     if ("Book unavailable or Out of Stock!".equals(aclMessage.getContent())) {
 
-                        gui.showMessage("[!] Book unavailable or out of stock!\n");
+                        gui.showMessage("[!] Book unavailable, or out of stock!\n");
                         ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
                         reply.setConversationId(conversationId);
                         reply.addReceiver(requester);
-                        reply.setContent("Book unavailable or out of stock!");
+                        reply.setContent("[!] Book unavailable, or out of stock!");
                         try {
                                 Thread.sleep(3000);
 
@@ -492,42 +433,35 @@ public void action() {
                     }
                     if (contentObject3.containsKey("NewOffer")) {
 
-                        gui.showMessage("[!] Received a new proposal from seller:");
-                        gui.showMessage("--" + aclMessage.getConversationId());
-                        gui.showMessage("From: " + aclMessage.getSender().getName());
-
+                        gui.showMessage("[#] Received a reply from seller:" + aclMessage.getSender().getName());
+                        
                         int sellerOffer = contentObject3.get("NewOffer");
-                        gui.showMessage("New Offer: " + sellerOffer + "%");
+                        
+                        gui.showMessage("[#] They offer: " + sellerOffer + "%");
 
                         if (sellerOffer <= strategy) {
 
-                            ACLMessage aclMessageP = new ACLMessage(ACLMessage.PROPOSE);
-                            aclMessageP.addReceiver(aclMessage.getSender());
-                            aclMessageP.setConversationId(conversationId);
-
-                            HashMap<String, Integer> contentObjectR = new HashMap<>();
-                            contentObjectR.put("No", sellerOffer);
+                            
 
                             try {
+                                gui.showMessage("[#] Low discount, negotiating again..\n");
+                                
+                                ACLMessage aclMessageP = new ACLMessage(ACLMessage.PROPOSE);
+                                aclMessageP.addReceiver(aclMessage.getSender());
+                                aclMessageP.setConversationId(conversationId);
+                                
+                                HashMap<String, Integer> contentObjectR = new HashMap<>();
+                                contentObjectR.put("No", sellerOffer);
+                                
+                                
                                 aclMessageP.setContentObject(contentObjectR);
-
-} catch (IOException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-
-                            gui.showMessage("[!] Low discount, negociating again..\n");
-                           
-                            try {
+                                myAgent.send(aclMessageP);
                                 Thread.sleep(3000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+                                
+                                
+                            } catch (IOException | InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            myAgent.send(aclMessageP);
                          
                         } else {
 
@@ -536,46 +470,40 @@ public void action() {
 
                     if (contentObject3.containsKey("LastOffer")) {
 
-                        gui.showMessage("[!] Received a new proposal from seller:");
-                        gui.showMessage("--" + aclMessage.getConversationId());
-                        gui.showMessage("From: " + aclMessage.getSender().getName());
-
+                        gui.showMessage("[#] New offer from: " + aclMessage.getSender().getName());
                         int sellerOffer = contentObject3.get("LastOffer");
-                        gui.showMessage("Offer: " + sellerOffer + "%");
+                        gui.showMessage("[#] They offer: " + sellerOffer + "%");
 
                         if (sellerOffer <= strategy) {
 
-                            ACLMessage aclMessageP = new ACLMessage(ACLMessage.PROPOSE);
-                            aclMessageP.addReceiver(aclMessage.getSender());
-                            aclMessageP.setConversationId(conversationId);
-
-                            HashMap<String, Integer> contentObjectR = new HashMap<>();
-int finalOffer = 0;
-                            if (sellerOffer == strategy){
-                            finalOffer = ThreadLocalRandom.current().nextInt(sellerOffer + 1, strategy);}
-                            else {finalOffer = ThreadLocalRandom.current().nextInt(sellerOffer, strategy);}
-                            
-                            gui.showMessage("[!] Higher discount, but not enough, negociating again..\n");
-                            gui.showMessage("[!] Making final offer of: " + finalOffer + "%");
-
-                            contentObjectR.put("FinalProposal", finalOffer);
                             try {
+                                ACLMessage aclMessageP = new ACLMessage(ACLMessage.PROPOSE);
+                                aclMessageP.addReceiver(aclMessage.getSender());
+                                aclMessageP.setConversationId(conversationId);
+                                
+                                HashMap<String, Integer> contentObjectR = new HashMap<>();
+                                
+                                int finalOffer = 0;
+                                
+                                if (sellerOffer == strategy){
+                                    finalOffer = ThreadLocalRandom.current().nextInt(sellerOffer + 1, strategy);}
+                                else {finalOffer = ThreadLocalRandom.current().nextInt(sellerOffer, strategy);}
+                                
+                                gui.showMessage("[#] Better discount, but not enough, negociating again..");
+                                gui.showMessage("[#] Making final offer of: " + finalOffer + "%\n");
+                                
+                                contentObjectR.put("FinalProposal", finalOffer);
+                                
                                 aclMessageP.setContentObject(contentObjectR);
-
-} catch (IOException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            try {
+                                
+                                
+                                myAgent.send(aclMessageP);
                                 Thread.sleep(3000);
-
-} catch (InterruptedException ex) {
-                                Logger.getLogger(BuyerBehaviour.class  
-
-.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException | InterruptedException ex) {
+                                Logger.getLogger(BuyerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            myAgent.send(aclMessageP);
+
+                            
                         }
 
                     }
