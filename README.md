@@ -48,9 +48,11 @@ Once the negotiation is complete, these scenarios can be expected:
 
 An extra scenario would be when there are multiple consumers (two for example) and  buyers (two as well), each buyer processes a consumer's order with a single seller but there is only one book left, if one of the buyers manages to get the book, the other consumer will get a message that there are no books left and the first consumer will get the book (if the negotiation is successful).
 
+- A consumer can be notified if negotiation is still in progress everytime.
+
 Handled ACLMessages: `conversationId`, `INFORM`.
 
-Here's an example of a successful transaction:
+Example of a successful transaction:
 
 ![image](https://user-images.githubusercontent.com/33737302/153946384-b7a3e9af-d009-40a4-b81b-4fb6c9068995.png)
 
@@ -59,7 +61,7 @@ Here's an example of a successful transaction:
 
 The buyer agents (that were implemented in this application) can have two strategies, 10% discount strategy or a 20% strategy (for the wanted book).
 
-Firstly, a buyer agent will: 
+A buyer agent will: 
 
 - Receive the order from the consumer and inform the consumer of the receival.
 - Once the transaction has been set (with a conversation id), they will request the DF for services that have been published for a `book-selling` type service by sellers.
@@ -70,7 +72,7 @@ Firstly, a buyer agent will:
 - The seller will make a higher offer.
 - When the buyer refuses the new offer (lower than 20% for example), the buyer will make a final proposal between the last offer and the 20%.
 - The seller processes the offer and can refuse or approve.
-- Once a seller approves, the buyer receives the approval and adds he seller to the waiting list until negotiation is done with other sellers.
+- Once a seller approves, the buyer receives the approval and adds the seller to the waiting list until negotiation is done with other sellers.
 - The buyer selects the lowest price possible, sends an approval to the best seller and receives a confirm then forwards it to the consumer.
 
 Handled ACLMessages: `conversationId`, `INFORM`, `PROPOSE`, `ACCEPT_PROPOSAL`, `REFUSE`, `CONFIRM`.
@@ -86,11 +88,16 @@ Each seller agent has a bookstore that they can manage, add a book (book title, 
 Once a seller agent is contacted, this scenario can be expected:
 
 - A seller receives a CFP (Call for Proposal) and proposes their book for a certain price (if available quantity wise and availability wise).
+ 
 - The seller receives an offer from a buyer (20% strategy for example), and processes the offer, if it is higer than their original maximum discount, they will ofer a percentage between 1% for example and their maximum discount 10% for example.
-- The buyer will deny that offer and so, the seller offers another discount that can be between half of the maximum discount and the original maximum discount (if last offer was less than half of the original maximum discount) OR offer the maximum discount immediately if the last offer was more than half the maximum.
-- A buyer will deny that offer again (10%<20%) for example so the buyer will send a final offer that is between the maximum discount (10%) and the strategy (20%).
-- A seller can accept or refuse based on the new percentage (if 18% for example for a 1000 priced book, the offer is denied because the minimum price for that book was 850 and 18% discount from 1000 is less than 850).
-- If a seller accepts (a 15% offer for example), they will send an approval and await an approval from the buyer, if not received that means a buyer found a better offer.
+
+- The buyer will deny that offer and so, the seller offers another discount that can be between half of the maximum discount and the original maximum discount (if last offer was less than half of the original maximum discount) or offer the maximum discount immediately if the last offer was more than half the maximum.
+
+- A buyer will deny that offer again (10% < 20%) for instace so the buyer will send a final offer that is between the maximum discount (10%) and the strategy (20%).
+
+- A seller can accept or refuse based on the new percentage (example, if 18% for a 1000 priced book, the offer is denied because the minimum price for that book was 850 and 18% discount from 1000 is less than 850).
+
+- If a seller accepts (a 15%), they will send an approval and await an approval from the buyer, if not received that means a buyer found a better offer.
 
 Other use cases:
 - A seller can inform the buyer that the book is unavailabe, the last book was just sold or out of stock.
